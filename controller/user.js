@@ -4,9 +4,14 @@ const UserModel = require("../model/user");
 
 const signUp = async (req, res) => {
   try {
+    if (!req.body.password) {
+      throw new Error("Password is required");
+    }
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     req.body.password = hashedPassword;
+    console.log(salt);
+    console.log(hashedPassword);
     console.log(req.body);
 
     const user = req.body;
