@@ -1,7 +1,10 @@
 const puppeteer = require("puppeteer");
 const { aiPrompt, aiResponce } = require("./human.js");
 
-let user;
+let user = {
+  browser: null,
+  page: null,
+};
 
 const setUser = (userData) => {
   user = userData;
@@ -17,9 +20,7 @@ const initBrowser = async () => {
       headless: true, // Change to false if you want to see the user.browser UI
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    console.log("browser initialized.");
-    console.log(user.browser);
-    return "browser initialized. emojies";
+    return user.browser;
   } else {
     throw new Error("browser already initialized.");
   }
@@ -43,7 +44,7 @@ const closePage = async () => {
     user.page = null;
     console.log(`Page is closed.`);
   } else {
-    throw new Error(`Page not found.`);
+    throw new Error(`No Previous Page found.`);
   }
 };
 
