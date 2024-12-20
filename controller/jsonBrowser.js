@@ -43,7 +43,8 @@ async function getBrowser(browserId) {
 
         // Parse and return JSON data
         const data = await response.json();
-        return data;
+        console.log('Response is here:', data.data[0]);
+        return data.data[0];
     } catch (error) {
         console.error('Error fetching data:', error);
         return null; // Return null if there's an error

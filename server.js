@@ -26,14 +26,14 @@ app.get("/", (req, res) => {
   res.json({
     status: true,
     domains: {
-      signUp: "to signup",
-      logIn: "to login",
-      logOut: "to logout",
-      users: "to get all users",
-      init: "to initialize browser",
-      newPage: "to open new page",
-      aiResponce: "to scrap data from page using prompt in request body",
-      close: "to close browser",
+      signUp: "to /signup",
+      logIn: "to /login",
+      logOut: "to /logout",
+      users: "to get all /users",
+      init: "to /init -ialize browser",
+      newPage: "to open /newpage",
+      aiResponce: "to /aiResponce scrap data from page using prompt in request body",
+      close: "to /close browser",
     },
   });
 });

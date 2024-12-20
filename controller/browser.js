@@ -33,6 +33,7 @@ const initPage = async (url = "https://deepai.org/chat") => {
     await page.goto(url);
     console.log("Page initialized.");
     user.page = page;
+    return page;
   } else {
     throw new Error("browser not initialized. Call /init first.");
   }

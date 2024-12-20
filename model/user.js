@@ -1,8 +1,8 @@
-const CdpBrowser = require('../class/cdpBrowser');
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    aiName: {type: String, default: "ALM"},
     basicInfo: {
       fName: { type: String, default: null },
       mName: { type: String, default: null },
@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true },
     browser: { type: mongoose.Schema.Types.Mixed, default: null },
     page: { type: mongoose.Schema.Types.Mixed, default: null },
+    data : [{ type: mongoose.Schema.ObjectId }],
     role: {
       type: String,
       required: true,
@@ -31,11 +32,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.post('findOne', function (doc) {
-  if (doc && doc.browser) {
-    doc.browser = new CdpBrowser(doc.browser.protocol);
-  }
-});
 
 const User = mongoose.model("OpanAiUsers", userSchema);
 
