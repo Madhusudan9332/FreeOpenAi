@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const responseDataModel = require("../model/responseData");
 const { ObjectId } = require("mongodb");
 const {
@@ -55,9 +53,7 @@ const gotoPage = async (req, res) => {
   try {
     let user = req.user;
     let pageId = req.headers.pageid;
-    console.log("pageId is : ",pageId);
     const promptData = await responseDataModel.findById(pageId);
-    console.log("promptData is : ",promptData);
     const textPrompt = convertToText(promptData.data);
     const userData = usersBrowser.filter((data) => {
       const id1 = new ObjectId(user._id);
@@ -70,28 +66,24 @@ const gotoPage = async (req, res) => {
     setUser(userData[0]);
     user = getUser();
     await closePage();
-    console.log("user then :", user);
+    console.log("resarting page...");
     await initPage();
     user = getUser();
-    console.log("user now :", user);
+    console.log("page restarted");
     await scrapData(`Our previous Conversation was : ${textPrompt}`);
     user = getUser();
-    console.log("usersBrowser then :", usersBrowser);
+    // console.log("usersBrowser then :", usersBrowser);
     for(let userData of usersBrowser){
-      console.log("userData :",userData);
       const id1 = new ObjectId(user.id);
       const id2 = new ObjectId(userData.id);
       if(id1.equals(id2)){
-        console.log("userData then :",userData);
         userData.page = user.page;
         userData.currentPageId = promptData._id;
-        console.log("userData now :",userData);
       }
     }
-    console.log("usersBrowser now :", usersBrowser);
+    // console.log("usersBrowser now :", usersBrowser);
     res.json({
       success: true,
-      // url: user.page,
       idUrl: `/aiResponce use prompt in body or header`,
     });
   } catch (err) {
@@ -117,7 +109,7 @@ const newPage = async (req, res) => {
       console.log(err.message);
     }
     const page = await initPage();
-    console.log("usersBrowser then :", usersBrowser);
+    // console.log("usersBrowser then :", usersBrowser);
     for (const data of usersBrowser) {
       try {
         const id1 = new ObjectId(user._id);
@@ -145,7 +137,7 @@ const newPage = async (req, res) => {
       }
     }
 
-    console.log("usersBrowser now :", usersBrowser);
+    // console.log("usersBrowser now :", usersBrowser);
     res.json({
       success: true,
       url: page,
@@ -169,7 +161,7 @@ const aiResponce = async (req, res) => {
       }
     });
     setUser(userData[0]);
-    console.log("userData[0] is : ", userData[0]);
+    // console.log("userData[0] is : ", userData[0]);
     const prompt = req.headers.prompt || req.body.prompt;
     const myPrompt = `Note: Your Ai name is ${aiName} reply only when ask, If User Wants to Change Ai name only then responce that goto "get: url/setAiName/:aiName" , otherwise give only ai responce of given prompt -> ${prompt}`;
     if (prompt) {

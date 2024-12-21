@@ -71,7 +71,6 @@ const scrapData = async (prompt) => {
     }
     await aiPrompt(prompt, page);
     const data = await aiResponce(page);
-    console.log(data);
     return data;
   } catch (err) {
     console.error("Error in scrapData:", err.message);

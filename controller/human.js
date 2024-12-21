@@ -21,7 +21,7 @@ async function aiResponce(page) {
   if (lastOutputBox) {
     // Extract the text from the last output box
     const outputText = await page.evaluate((el) => el.innerText, lastOutputBox);
-    console.log("AI Response:", outputText);
+    // console.log("AI Response:", outputText);
     return outputText; // Return the response text
   } else {
     throw new Error("Output box not found.");
