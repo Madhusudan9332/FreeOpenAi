@@ -11,6 +11,7 @@ router.post('/logIn',userController.logIn)
 router.get('/profile',userAuthentication,userController.users)
 router.post('/init',userAuthentication,openAiController.init)
 router.post('/newPage',userAuthentication,openAiController.newPage)
+router.post('/gotoPage',userAuthentication,openAiController.gotoPage)
 router.post('/aiResponce',userAuthentication,openAiController.aiResponce)
 router.post('/close',userAuthentication,openAiController.close)
 

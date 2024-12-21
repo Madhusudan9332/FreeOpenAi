@@ -32,6 +32,7 @@ app.get("/", (req, res) => {
       users: "to get all /users",
       init: "to /init -ialize browser",
       newPage: "to open /newpage",
+      gotoPage: "to /gotoPage",
       aiResponce: "to /aiResponce scrap data from page using prompt in request body",
       close: "to /close browser",
     },

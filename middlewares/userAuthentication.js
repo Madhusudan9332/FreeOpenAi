@@ -48,7 +48,6 @@ const userAuthentication = async (req, res, next) => {
       });
     }
     req.user = user;
-    req.prompt = req.body?.prompt || req.headers?.prompt;
     // console.log(req.body?.prompt);
 
     next();

@@ -51,6 +51,54 @@ const init = async (req, res) => {
   }
 };
 
+const gotoPage = async (req, res) => {
+  try {
+    let user = req.user;
+    let pageId = req.headers.pageid;
+    console.log("pageId is : ",pageId);
+    const promptData = await responseDataModel.findById(pageId);
+    console.log("promptData is : ",promptData);
+    const textPrompt = convertToText(promptData.data);
+    const userData = usersBrowser.filter((data) => {
+      const id1 = new ObjectId(user._id);
+      const id2 = new ObjectId(data.id);
+      if (id1.equals(id2)) {
+        console.log("true Event");
+        return true;
+      }
+    });
+    setUser(userData[0]);
+    user = getUser();
+    await closePage();
+    console.log("user then :", user);
+    await initPage();
+    user = getUser();
+    console.log("user now :", user);
+    await scrapData(`Our previous Conversation was : ${textPrompt}`);
+    user = getUser();
+    console.log("usersBrowser then :", usersBrowser);
+    for(let userData of usersBrowser){
+      console.log("userData :",userData);
+      const id1 = new ObjectId(user.id);
+      const id2 = new ObjectId(userData.id);
+      if(id1.equals(id2)){
+        console.log("userData then :",userData);
+        userData.page = user.page;
+        userData.currentPageId = promptData._id;
+        console.log("userData now :",userData);
+      }
+    }
+    console.log("usersBrowser now :", usersBrowser);
+    res.json({
+      success: true,
+      // url: user.page,
+      idUrl: `/aiResponce use prompt in body or header`,
+    });
+  } catch (err) {
+    res.status(500).send(`Error Finding page: ${err.message}`);
+  }
+};
+
 const newPage = async (req, res) => {
   try {
     let user = req.user;
@@ -122,7 +170,7 @@ const aiResponce = async (req, res) => {
     });
     setUser(userData[0]);
     console.log("userData[0] is : ", userData[0]);
-    const prompt = req.prompt;
+    const prompt = req.headers.prompt || req.body.prompt;
     const myPrompt = `Note: Your Ai name is ${aiName} reply only when ask, If User Wants to Change Ai name only then responce that goto "get: url/setAiName/:aiName" , otherwise give only ai responce of given prompt -> ${prompt}`;
     if (prompt) {
       let data = await scrapData(myPrompt);
@@ -183,6 +231,15 @@ const close = async (req, res) => {
   }
 };
 
-const openAiController = { init, newPage, aiResponce, close };
+const openAiController = { init, gotoPage, newPage, aiResponce, close };
+
+const convertToText = (data) => {
+  return data
+    .map(
+      (item) => `Prompt: "${item.prompt}"\nAI Response: "${item.aiResponse}"\n`
+    )
+    .join("\n");
+};
 
 module.exports = openAiController;
+
